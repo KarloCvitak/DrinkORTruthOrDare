@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Pijana Istina ili Izazov</string>
+    <string name="player_input_title">Unesite Imena Igrača</string>
+    <string name="add_player">Dodaj Igrača</string>
+    <string name="start_game">Započni Igru</string>
+    <string name="truth">Istina</string>
+    <string name="dare">Izazov</string>
+    <string name="drink_shot">Popij Čašicu</string>
+    <string name="add_player_hint">Unesi ime igrača</string>
+    <string name="finish">Završi</string>
+    <string name="current_player">Trenutni igrač</string>
+
+
+    <string-array name="truth_questions">
+        <item>Koja je tvoja najdublja tajna?</item>
+        <item>Jesi li ikada lagao/la najboljem prijatelju?</item>
+    </string-array>
+    <string-array name="dare_questions">
+        <item>Napravite 10 sklekova!</item>
+        <item>Plešite jednu minutu bez glazbe!</item>
+    </string-array>
+
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Hrvatski</item>
+        <item>Español</item>
+    </string-array>
+
+
+</resources>

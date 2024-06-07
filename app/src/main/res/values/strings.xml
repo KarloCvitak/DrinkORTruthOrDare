@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Drinking Truth or Dare</string>
+    <string name="player_input_title">Enter Player Names</string>
+    <string name="add_player">Add Player</string>
+    <string name="start_game">Start Game</string>
+    <string name="truth">Truth</string>
+    <string name="dare">Dare</string>
+    <string name="drink_shot">Drink a Shot</string>
+    <string name="add_player_hint">Enter player name</string>
+    <string name="finish">Finish</string>
+    <string name="current_player">Current Player: </string>
+
+
+    <string-array name="truth_questions">
+        <item>What is your deepest secret?</item>
+        <item>Have you ever lied to your best friend?</item>
+    </string-array>
+
+    <string-array name="dare_questions">
+        <item>Do 10 push-ups!</item>
+        <item>Dance for one minute without music!</item>
+    </string-array>
+
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Hrvatski</item>
+        <item>Español</item>
+    </string-array>
+
+</resources>

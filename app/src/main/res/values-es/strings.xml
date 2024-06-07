@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Verdad o Reto Beber</string>
+    <string name="player_input_title">Ingrese Nombres de Jugadores</string>
+    <string name="add_player">Agregar Jugador</string>
+    <string name="start_game">Comenzar Juego</string>
+    <string name="truth">Verdad</string>
+    <string name="dare">Reto</string>
+    <string name="drink_shot">Toma un Trago</string>
+    <string name="add_player_hint">Enter player name</string>
+    <string name="finish">Finish</string>
+    <string name="current_player">Current player</string>
+
+
+    <string-array name="truth_questions">
+        <item>¿Cuál es tu secreto más profundo?</item>
+        <item>¿Alguna vez le has mentido a tu mejor amigo?</item>
+    </string-array>
+    <string-array name="dare_questions">
+        <item>¡Haz 10 flexiones!</item>
+        <item>¡Baila un minuto sin música!</item>
+    </string-array>
+
+
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Hrvatski</item>
+        <item>Español</item>
+    </string-array>
+
+</resources>
+
+
+
+
+
