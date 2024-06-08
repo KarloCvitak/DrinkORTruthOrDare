@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import hr.tvz.android.drinkingtruthordare.databinding.FragmentDrinkBinding
 import kotlin.random.Random
+import hr.tvz.android.drinkingtruthordare.R
 
 class DrinkFragment : Fragment() {
     private lateinit var binding: FragmentDrinkBinding
@@ -19,7 +20,8 @@ class DrinkFragment : Fragment() {
 
         // Generate a random number between 1 and 2
         val shots = Random.nextInt(1, 3)
-        binding.drinkText.text = "$shots shots!"
+        val shotsText = getString(R.string.shots)
+        binding.drinkText.text = "$shots $shotsText!"
 
         binding.finishButton.setOnClickListener {
             parentFragmentManager.popBackStack()

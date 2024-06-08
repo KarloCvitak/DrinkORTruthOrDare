@@ -5,15 +5,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        style="@style/ContainerStyle">
+        android:padding="16dp"
+        android:gravity="center">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/logoImageView"
+            style="@style/LogoImageStyle"
+            android:layout_width="match_parent"
+            android:layout_height="179dp"
+            android:layout_marginBottom="16dp" />
 
         <Button
             android:id="@+id/startGameButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/start_game"
-            style="@style/ButtonStyle"/>
+            style="@style/ButtonStyle"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -29,5 +37,6 @@
                 android:layout_marginTop="16dp"
                 android:entries="@array/language_options" />
         </LinearLayout>
+
     </LinearLayout>
 </layout>

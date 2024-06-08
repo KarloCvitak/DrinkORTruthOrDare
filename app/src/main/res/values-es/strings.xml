@@ -9,17 +9,34 @@
     <string name="add_player_hint">Enter player name</string>
     <string name="finish">Finish</string>
     <string name="current_player">Current player</string>
+    <string name="shots">disparos</string>
 
 
     <string-array name="truth_questions">
         <item>¿Cuál es tu secreto más profundo?</item>
-        <item>¿Alguna vez le has mentido a tu mejor amigo?</item>
-    </string-array>
-    <string-array name="dare_questions">
-        <item>¡Haz 10 flexiones!</item>
-        <item>¡Baila un minuto sin música!</item>
+        <item>¿Alguna vez le has mentido a tu mejor amigo/a?</item>
+        <item>¿Cuál es tu mayor miedo?</item>
+        <item>¿Alguna vez has hecho trampa en un examen?</item>
+        <item>¿Cuál es la cosa más embarazosa que has hecho?</item>
+        <item>¿Alguna vez has robado algo?</item>
+        <item>¿Quién es tu amor secreto?</item>
+        <item>¿Cuál es tu hábito más irritante?</item>
+        <item>¿Alguna vez te has enamorado?</item>
+        <item>¿Cuál es tu mayor arrepentimiento?</item>
     </string-array>
 
+    <string-array name="dare_questions">
+        <item>¡Haz 10 flexiones!</item>
+        <item>¡Baila durante un minuto sin música!</item>
+        <item>¡Abraza a alguien durante 20 segundos!</item>
+        <item>¡Canta una canción en voz alta!</item>
+        <item>¡Haz un baile tonto durante 30 segundos!</item>
+        <item>¡Mantén una plancha durante 1 minuto!</item>
+        <item>¡Corre alrededor de la casa durante 1 minuto!</item>
+        <item>¡Habla con acento durante las próximas 3 rondas!</item>
+        <item>¡Deja que alguien te haga cosquillas durante 20 segundos!</item>
+        <item>¡Habla con una voz graciosa durante los próximos 3 minutos!</item>
+    </string-array>
 
     <string-array name="language_options">
         <item>English</item>

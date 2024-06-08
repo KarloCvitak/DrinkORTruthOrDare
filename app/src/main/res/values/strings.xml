@@ -9,16 +9,36 @@
     <string name="add_player_hint">Enter player name</string>
     <string name="finish">Finish</string>
     <string name="current_player">Current Player: </string>
+    <string name="shots">shots</string>
+
 
 
     <string-array name="truth_questions">
         <item>What is your deepest secret?</item>
         <item>Have you ever lied to your best friend?</item>
+        <item>What is your biggest fear?</item>
+        <item>Have you ever cheated on a test?</item>
+        <item>What is the most embarrassing thing you\'ve ever done?</item>
+        <item>Have you ever stolen something?</item>
+        <item>Who is your secret crush?</item>
+        <item>What is the most annoying habit you have?</item>
+        <item>Have you ever been in love?</item>
+        <item>What is your biggest regret?</item>
+        <!-- Add more questions as needed -->
     </string-array>
 
     <string-array name="dare_questions">
         <item>Do 10 push-ups!</item>
         <item>Dance for one minute without music!</item>
+        <item>Hug someone for 20 seconds!</item>
+        <item>Sing a song loudly!</item>
+        <item>Do a silly dance for 30 seconds!</item>
+        <item>Hold a plank for 1 minute!</item>
+        <item>Run around the house for 1 minute!</item>
+        <item>Talk in an accent for the next 3 rounds!</item>
+        <item>Let someone tickle you for 20 seconds!</item>
+        <item>Speak in a funny voice for the next 3 minutes!</item>
+        <!-- Add more dares as needed -->
     </string-array>
 
     <string-array name="language_options">
