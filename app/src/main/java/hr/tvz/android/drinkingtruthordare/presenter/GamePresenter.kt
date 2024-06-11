@@ -2,29 +2,43 @@ package hr.tvz.android.drinkingtruthordare.presenter
 
 import android.content.Context
 import hr.tvz.android.drinkingtruthordare.MVP.MVP
-import hr.tvz.android.drinkingtruthordare.R
+import hr.tvz.android.drinkingtruthordare.network.RetrofitInstance
 
-class GamePresenter : MVP.Presenter {
-    private lateinit var view: MVP.View
-    private lateinit var context: Context
+import hr.tvz.android.drinkingtruthordare.network.QuestionsResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-    constructor()
+class GamePresenter(private val view: MVP.View, private val context: Context) : MVP.Presenter {
 
-    constructor(view: MVP.View, context: Context) {
-        this.view = view
-        this.context = context
-    }
+    private val apiService = RetrofitInstance.apiService
 
     override fun onTruthSelected() {
-        val truthQuestions = context.resources.getStringArray(R.array.truth_questions).toList()
-        val truthQuestion = getRandomQuestion(truthQuestions)
-        view.showQuestion(truthQuestion)
+        fetchQuestions("truth")
     }
 
     override fun onDareSelected() {
-        val dareQuestions = context.resources.getStringArray(R.array.dare_questions).toList()
-        val dareQuestion = getRandomQuestion(dareQuestions)
-        view.showQuestion(dareQuestion)
+        fetchQuestions("dare")
+    }
+
+    private fun fetchQuestions(type: String) {
+        val language = context.resources.configuration.locales.get(0).language
+        apiService.getQuestions(language, type).enqueue(object : Callback<QuestionsResponse> {
+            override fun onResponse(call: Call<QuestionsResponse>, response: Response<QuestionsResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.questions?.let { questions ->
+                        val question = getRandomQuestion(questions)
+                        view.showQuestion(question)
+                    }
+                } else {
+                    view.showError("Failed to load questions")
+                }
+            }
+
+            override fun onFailure(call: Call<QuestionsResponse>, t: Throwable) {
+                view.showError("Error: ${t.message}")
+            }
+        })
     }
 
     private fun getRandomQuestion(questions: List<String>): String {

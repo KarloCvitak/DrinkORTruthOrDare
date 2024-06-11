@@ -17,8 +17,22 @@ import hr.tvz.android.drinkingtruthordare.view.activities.MainActivity
 class GameFragment : Fragment(), MVP.View {
     private lateinit var binding: FragmentGameBinding
     private lateinit var presenter: GamePresenter
-    private lateinit var mediaPlayer: MediaPlayer
-    private var countDownTimer: CountDownTimer? = null // Dodajemo varijablu za timer
+    private var countDownTimer: CountDownTimer? = null
+    private var currentQuestion: String? = null
+    private var currentPlayer: String? = null
+    private var mediaPlayer: MediaPlayer? = null
+    private var remainingTime: Long = 0L
+
+    companion object {
+        private const val STATE_CURRENT_QUESTION = "current_question"
+        private const val STATE_CURRENT_PLAYER = "current_player"
+        private const val STATE_TIMER_RUNNING = "is_timer_running"
+        private const val STATE_REMAINING_TIME = "remaining_time"
+        private const val STATE_DRINK_BUTTON_VISIBLE = "is_drink_button_visible"
+        private const val STATE_FINISH_BUTTON_VISIBLE = "is_finish_button_visible"
+        private const val STATE_START_TIMER_BUTTON_VISIBLE = "is_start_timer_button_visible"
+        private const val STATE_STOP_TIMER_BUTTON_VISIBLE = "is_stop_timer_button_visible"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +40,6 @@ class GameFragment : Fragment(), MVP.View {
     ): View {
         binding = FragmentGameBinding.inflate(inflater, container, false)
         presenter = GamePresenter(this, requireContext())
-        // mediaPlayer = MediaPlayer.create(context, R.raw.timer_end_sound) // Dodajte zvuk završetka timera
 
         binding.truthButton.setOnClickListener {
             presenter.onTruthSelected()
@@ -52,18 +65,41 @@ class GameFragment : Fragment(), MVP.View {
             stopTimer()
         }
 
-        binding.drinkButton.visibility = View.GONE
-        binding.finishButton.visibility = View.GONE
-        binding.startTimerButton.visibility = View.GONE
-        binding.stopTimerButton.visibility = View.GONE
-        binding.questionText.text = "" // Ensure the text is empty initially
+        if (savedInstanceState != null) {
+            currentQuestion = savedInstanceState.getString(STATE_CURRENT_QUESTION)
+            currentPlayer = savedInstanceState.getString(STATE_CURRENT_PLAYER)
+            val isTimerRunning = savedInstanceState.getBoolean(STATE_TIMER_RUNNING)
+            val isDrinkButtonVisible = savedInstanceState.getBoolean(STATE_DRINK_BUTTON_VISIBLE)
+            val isFinishButtonVisible = savedInstanceState.getBoolean(STATE_FINISH_BUTTON_VISIBLE)
+            val isStartTimerButtonVisible = savedInstanceState.getBoolean(STATE_START_TIMER_BUTTON_VISIBLE)
+            val isStopTimerButtonVisible = savedInstanceState.getBoolean(STATE_STOP_TIMER_BUTTON_VISIBLE)
+            remainingTime = savedInstanceState.getLong(STATE_REMAINING_TIME)
 
-        chooseNextPlayer()
+            currentQuestion?.let { showQuestion(it) }
+            currentPlayer?.let { showCurrentPlayer(it) }
+
+            if (isTimerRunning) {
+                startTimer(currentQuestion ?: "", remainingTime)
+            }
+
+            binding.drinkButton.visibility = if (isDrinkButtonVisible) View.VISIBLE else View.GONE
+            binding.finishButton.visibility = if (isFinishButtonVisible) View.VISIBLE else View.GONE
+            binding.startTimerButton.visibility = if (isStartTimerButtonVisible) View.VISIBLE else View.GONE
+            binding.stopTimerButton.visibility = if (isStopTimerButtonVisible) View.VISIBLE else View.GONE
+        } else {
+            binding.drinkButton.visibility = View.GONE
+            binding.finishButton.visibility = View.GONE
+            binding.startTimerButton.visibility = View.GONE
+            binding.stopTimerButton.visibility = View.GONE
+            binding.questionText.text = ""
+            chooseNextPlayer()
+        }
 
         return binding.root
     }
 
     override fun showQuestion(question: String) {
+        currentQuestion = question
         binding.questionText.text = question
         binding.questionText.visibility = View.VISIBLE
         binding.buttonsLayout.visibility = View.GONE
@@ -81,20 +117,26 @@ class GameFragment : Fragment(), MVP.View {
     }
 
     override fun showError(message: String) {
-        // Handle error
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun chooseNextPlayer() {
         val players = (activity as MainActivity).playerInputPresenter.getPlayers()
         if (players.isNotEmpty()) {
             val randomPlayer = players.random().username
-            binding.currentPlayerText.text = getString(R.string.current_player) + ": " + randomPlayer
+            showCurrentPlayer(randomPlayer)
         } else {
-            binding.currentPlayerText.text = "No players available"
+            binding.currentPlayerText.text = getString(R.string.no_players_available)
         }
     }
 
-    private fun startTimer(question: String) {
+    private fun showCurrentPlayer(player: String) {
+        currentPlayer = player
+        binding.currentPlayerText.text = getString(R.string.current_player) + ": " + player
+    }
+
+
+    private fun startTimer(question: String, remaining: Long = 0L) {
         val duration = when {
             question.contains("20") -> 20000L
             question.contains("30") -> 30000L
@@ -103,19 +145,22 @@ class GameFragment : Fragment(), MVP.View {
             else -> 0L
         }
 
-        if (duration > 0) {
+        val timeLeft = if (remaining > 0) remaining else duration
+
+        if (timeLeft > 0) {
             binding.startTimerButton.visibility = View.GONE
             binding.stopTimerButton.visibility = View.VISIBLE
-            countDownTimer = object : CountDownTimer(duration, 1000) {
+            countDownTimer = object : CountDownTimer(timeLeft, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
+                    remainingTime = millisUntilFinished
                     val secondsRemaining = millisUntilFinished / 1000
-                    binding.questionText.text = "$question\nPreostalo vrijeme: $secondsRemaining sekundi"
+                    binding.questionText.text = "$question\n${getString(R.string.remaining_time)}: $secondsRemaining ${getString(R.string.seconds)}"
                 }
 
                 override fun onFinish() {
-                    // mediaPlayer.start() // Reprodukcija zvuka
-                    Toast.makeText(context, "Vrijeme je isteklo!", Toast.LENGTH_SHORT).show()
-                    binding.questionText.text = question.replace(Regex("\\d+ sekundi|\\d+ minuta|\\d+ segundos|\\d+ minutos"), "")
+                    playBeepSound()
+                    Toast.makeText(context, getString(R.string.time_is_up), Toast.LENGTH_SHORT).show()
+                    binding.questionText.text = question.replace(Regex("\\d+ ${getString(R.string.seconds)}|\\d+ ${getString(R.string.minutes)}"), "")
                     binding.stopTimerButton.visibility = View.GONE
                 }
             }.start()
@@ -124,10 +169,10 @@ class GameFragment : Fragment(), MVP.View {
 
     private fun stopTimer() {
         countDownTimer?.cancel()
-        Toast.makeText(context, "Timer je zaustavljen!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.timer_stopped), Toast.LENGTH_SHORT).show()
         binding.stopTimerButton.visibility = View.GONE
         binding.startTimerButton.visibility = View.GONE
-        binding.questionText.text = binding.questionText.text.toString().replace(Regex("\nPreostalo vrijeme: \\d+ sekundi"), "")
+        binding.questionText.text = binding.questionText.text.toString().replace(Regex("\n${getString(R.string.remaining_time)}: \\d+ ${getString(R.string.seconds)}"), "")
     }
 
     private fun resetView() {
@@ -138,12 +183,35 @@ class GameFragment : Fragment(), MVP.View {
         binding.finishButton.visibility = View.GONE
         binding.startTimerButton.visibility = View.GONE
         binding.stopTimerButton.visibility = View.GONE
-        countDownTimer?.cancel() // Otkazujemo timer kad resetiramo view
+        countDownTimer?.cancel()
+        currentQuestion = null
+    }
+
+    private fun playBeepSound() {
+        mediaPlayer = MediaPlayer.create(context, R.raw.beep)
+        mediaPlayer?.setOnCompletionListener {
+            it.release()
+        }
+        mediaPlayer?.start()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (::presenter.isInitialized) {
+            outState.putString(STATE_CURRENT_QUESTION, currentQuestion)
+            outState.putString(STATE_CURRENT_PLAYER, currentPlayer)
+            outState.putBoolean(STATE_TIMER_RUNNING, countDownTimer != null)
+            outState.putLong(STATE_REMAINING_TIME, remainingTime)
+            outState.putBoolean(STATE_DRINK_BUTTON_VISIBLE, binding.drinkButton.visibility == View.VISIBLE)
+            outState.putBoolean(STATE_FINISH_BUTTON_VISIBLE, binding.finishButton.visibility == View.VISIBLE)
+            outState.putBoolean(STATE_START_TIMER_BUTTON_VISIBLE, binding.startTimerButton.visibility == View.VISIBLE)
+            outState.putBoolean(STATE_STOP_TIMER_BUTTON_VISIBLE, binding.stopTimerButton.visibility == View.VISIBLE)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // mediaPlayer.release() // Oslobodite MediaPlayer resurse
-        countDownTimer?.cancel() // Otkazujemo timer kad fragment bude uništen
+        mediaPlayer?.release()
+        countDownTimer?.cancel()
     }
 }

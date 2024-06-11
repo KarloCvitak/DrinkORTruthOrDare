@@ -11,6 +11,16 @@
     <string name="current_player">Trenutni igrač</string>
     <string name="shots">zemi</string>
 
+    <string name="stop_timer">Pokreni odbrojavanje</string>
+    <string name="start_timer">Zaustavi odbrojavanje</string>
+
+    <string name="remaining_time">Preostalo vrijeme</string>
+    <string name="seconds">sekundi</string>
+    <string name="minutes">minuta</string>
+    <string name="time_is_up">Vrijeme je isteklo!</string>
+
+    <string name="timer_stopped">Timer je zaustavljen!</string>
+    <string name="no_players_available">Nema dostupnih igrača</string>
 
     <string-array name="truth_questions">
         <item>Koja je tvoja najdublja tajna?</item>

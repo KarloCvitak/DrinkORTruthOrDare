@@ -3,7 +3,11 @@ package hr.tvz.android.drinkingtruthordare.presenter
 import hr.tvz.android.drinkingtruthordare.model.Player
 
 class PlayerInputPresenter {
-    private val players = mutableListOf<Player>()
+    private val players: MutableList<Player> = mutableListOf()
+
+    fun getPlayers(): List<Player> {
+        return players
+    }
 
     fun addPlayer(username: String) {
         players.add(Player(username))
@@ -13,5 +17,7 @@ class PlayerInputPresenter {
         players.removeAll { it.username == username }
     }
 
-    fun getPlayers(): List<Player> = players
+    fun clearPlayers() {
+        players.clear()
+    }
 }
